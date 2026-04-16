@@ -25,7 +25,7 @@ function welcoming() {
 
   aReturn[0] = "Welcome to Simple Salon";
   aReturn[1] = "What would you like?";
-  aReturn[2] = "Choose buzz cut or regular cut";
+  aReturn[2] = "Choose haircut or hair colour";
 
   return aReturn;
 }
@@ -34,22 +34,20 @@ function choosingItem(sInput) {
   let aReturn = [];
   let input = sInput.toLowerCase();
 
-  if (
-    input.includes("buzz") ||
-    input.includes("regular")
-  ) {
-    if (input.includes("buzz")) {
-      sItem = "Buzz Cut";
+  if (input.includes("haircut") || input.includes("colour")) {
+
+    if (input.includes("haircut")) {
+      sItem = "Haircut";
     } else {
-      sItem = "Regular Cut";
+      sItem = "Hair Colour";
     }
 
     currentState = choosingOptionOne;
-    aReturn[0] = "Blade size? (1 or 2)";
+    aReturn[0] = "Hair length? (short or long)";
     return aReturn;
   }
 
-  aReturn[0] = "Type buzz or regular";
+  aReturn[0] = "Type haircut or colour";
   return aReturn;
 }
 
@@ -57,22 +55,20 @@ function choosingOptionOne(sInput) {
   let aReturn = [];
   let input = sInput.toLowerCase();
 
-  if (
-    input.includes("1") ||
-    input.includes("2")
-  ) {
-    if (input.includes("1")) {
-      sOptionOne = "1 Blade";
+  if (input.includes("short") || input.includes("long")) {
+
+    if (input.includes("short")) {
+      sOptionOne = "Short";
     } else {
-      sOptionOne = "2 Blade";
+      sOptionOne = "Long";
     }
 
     currentState = choosingOptionTwo;
-    aReturn[0] = "Finish? clean or natural";
+    aReturn[0] = "Service type? (basic or full)";
     return aReturn;
   }
 
-  aReturn[0] = "Type 1 or 2";
+  aReturn[0] = "Type short or long";
   return aReturn;
 }
 
@@ -80,16 +76,14 @@ function choosingOptionTwo(sInput) {
   let aReturn = [];
   let input = sInput.toLowerCase();
 
-  if (
-    input.includes("clean") ||
-    input.includes("natural")
-  ) {
+  if (input.includes("basic") || input.includes("full")) {
+
     let sOptionTwo = "";
 
-    if (input.includes("clean")) {
-      sOptionTwo = "Clean";
+    if (input.includes("basic")) {
+      sOptionTwo = "Basic";
     } else {
-      sOptionTwo = "Natural";
+      sOptionTwo = "Full";
     }
 
     oOrder.aItems[oOrder.aItems.length] = {
@@ -107,7 +101,7 @@ function choosingOptionTwo(sInput) {
     return aReturn;
   }
 
-  aReturn[0] = "Type clean or natural";
+  aReturn[0] = "Type basic or full";
   return aReturn;
 }
 
@@ -117,13 +111,13 @@ function anotherItem(sInput) {
 
   if (input.includes("yes")) {
     currentState = choosingItem;
-    aReturn[0] = "Choose buzz or regular";
+    aReturn[0] = "Choose haircut or colour";
     return aReturn;
   }
 
   if (input.includes("no")) {
     currentState = upsell;
-    aReturn[0] = "Add shampoo? (yes/no)";
+    aReturn[0] = "Add hair treatment? (yes/no)";
     return aReturn;
   }
 
@@ -138,7 +132,7 @@ function upsell(sInput) {
   if (input.includes("yes")) {
     oOrder.bExtraItem = true;
     currentState = done;
-    aReturn[0] = "Booked with shampoo";
+    aReturn[0] = "Booked with treatment";
     return aReturn;
   }
 
@@ -155,7 +149,7 @@ function upsell(sInput) {
 
 function done() {
   let aReturn = [];
-  aReturn[0] = "Done";
+  aReturn[0] = "Done. Thanks!";
   return aReturn;
 }
 

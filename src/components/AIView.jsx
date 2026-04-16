@@ -1,5 +1,6 @@
+import React, { useState } from "react";
 import { handleInput } from "../salonChat";
-import { useState } from "react";
+
 export default function AIView() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -11,30 +12,39 @@ export default function AIView() {
     setInput("");
   }
 
+  // start chat once
+  if (messages.length === 0) {
+    let start = handleInput("");
+    setMessages(start);
+  }
+
   return (
     <div style={{ padding: "20px" }}>
       <h2>Simple Salon</h2>
 
-      <div style={{
-        border: "1px solid #ccc",
-        height: "300px",
-        overflowY: "auto",
-        marginBottom: "10px",
-        padding: "10px"
-      }}>
+      <div
+        style={{
+          border: "1px solid #ccc",
+          height: "300px",
+          overflowY: "auto",
+          marginBottom: "10px",
+          padding: "10px"
+        }}
+      >
         {messages.map((m, i) => (
           <p key={i}>{m}</p>
         ))}
       </div>
 
-   <div>
-  <button onClick={() => setInput("buzz")}>Buzz Cut</button>
-  <button onClick={() => setInput("regular")}>Regular Cut</button>
-  <button onClick={() => setInput("1")}>1 Blade</button>
-  <button onClick={() => setInput("2")}>2 Blade</button>
-  <button onClick={() => setInput("clean")}>Clean</button>
-  <button onClick={() => setInput("natural")}>Natural</button>
-</div>
+      {/* Buttons */}
+      <div>
+        <button onClick={() => setInput("haircut")}>Haircut</button>
+        <button onClick={() => setInput("colour")}>Hair Colour</button>
+        <button onClick={() => setInput("short")}>Short</button>
+        <button onClick={() => setInput("long")}>Long</button>
+        <button onClick={() => setInput("basic")}>Basic</button>
+        <button onClick={() => setInput("full")}>Full</button>
+      </div>
 
       <br />
 
