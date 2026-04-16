@@ -1,99 +1,47 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Keyboard, Platform } from 'react-native';
-import { handleInput } from '../Order';
-import ChatView from './ChatView'
-import WelcomeView from './WelcomeView';
-
-export default function(){
+import { handleInput } from "../salonChat";
+import { useState } from "react";
+export default function AIView() {
   const [messages, setMessages] = useState([]);
-  const [inputBarText, setInputBarText] = useState('');
-  const scrollViewRef = useRef(null);
+  const [input, setInput] = useState("");
 
-  // Scroll to bottom helper
-  const scrollToBottom = (animated = true) => {
-    // Small timeout ensures the layout has calculated before scrolling
-    setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd({ animated });
-    }, 100);
-  };
+  function send() {
+    let replies = handleInput(input);
 
-  useEffect(() => {
-    // Setup keyboard listeners
-    const showSubscription = Keyboard.addListener('keyboardDidShow', () => scrollToBottom());
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => scrollToBottom());
-
-    // Initial scroll
-    scrollToBottom(false);
-
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, []);
-
-  // Scroll whenever messages update
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const sendMessage = () => {
-    if (inputBarText.trim().length === 0) return;
-
-    // Correct way to update state: create a NEW array
-    let newMessages = [{ direction: 'right', text: inputBarText }];
-    const aResponse = handleInput(inputBarText);
-    for(const message of aResponse){
-      newMessages.push({direction: "left", text: message});
-    }
-    setMessages([...messages, ...newMessages]);
-    setInputBarText('');
-  };
+    setMessages([...messages, "You: " + input, ...replies]);
+    setInput("");
+  }
 
   return (
-    <View style={styles.outer}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
-        style={{ flex: 1 }}
-      >
-        {messages.length?(
-        <ChatView scrollToBottom={scrollToBottom} 
-        sendMessage={sendMessage} 
-        scrollViewRef={scrollViewRef} 
-        styles={styles} 
-        messages={messages} 
-        setInputBarText={setInputBarText}
-        inputBarText={inputBarText}  />
+    <div style={{ padding: "20px" }}>
+      <h2>Simple Salon</h2>
 
-        ):(
-          <WelcomeView 
-          scrollToBottom={scrollToBottom} 
-        sendMessage={sendMessage} 
-        scrollViewRef={scrollViewRef} 
-        styles={styles} 
-        messages={messages} 
-        setInputBarText={setInputBarText}
-        inputBarText={inputBarText}  />
+      <div style={{
+        border: "1px solid #ccc",
+        height: "300px",
+        overflowY: "auto",
+        marginBottom: "10px",
+        padding: "10px"
+      }}>
+        {messages.map((m, i) => (
+          <p key={i}>{m}</p>
+        ))}
+      </div>
 
-        )}
-      </KeyboardAvoidingView>
-    </View>
+      <div>
+        <button onClick={() => setInput("buzz")}>Buzz Cut</button>
+        <button onClick={() => setInput("regular")}>Regular Cut</button>
+        <button onClick={() => setInput("1")}>1 Blade</button>
+      </div>
+
+      <br />
+
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Type here..."
+      />
+
+      <button onClick={send}>Send</button>
+    </div>
   );
-};
-
-//TODO: separate these out. This is what happens when you're in a hurry!
-const styles = StyleSheet.create({
-
-  //ChatView
-
-  outer: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    backgroundColor: 'white'
-  },
-
-  messages: {
-    flex: 1
-  },
-
-})
+}
