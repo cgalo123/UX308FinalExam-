@@ -27,11 +27,14 @@ export default function AIView() {
         ))}
       </div>
 
-      <div>
-        <button onClick={() => setInput("buzz")}>Buzz Cut</button>
-        <button onClick={() => setInput("regular")}>Regular Cut</button>
-        <button onClick={() => setInput("1")}>1 Blade</button>
-      </div>
+   <div>
+  <button onClick={() => setInput("buzz")}>Buzz Cut</button>
+  <button onClick={() => setInput("regular")}>Regular Cut</button>
+  <button onClick={() => setInput("1")}>1 Blade</button>
+  <button onClick={() => setInput("2")}>2 Blade</button>
+  <button onClick={() => setInput("clean")}>Clean</button>
+  <button onClick={() => setInput("natural")}>Natural</button>
+</div>
 
       <br />
 
